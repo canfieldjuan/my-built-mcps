@@ -1,0 +1,21 @@
+{
+  "big_picture_project": {
+    "autoLoad": true,
+    "conventions": {
+      "typescript": "strict mode enabled",
+      "style": "Airbnb ESLint",
+      "components": "atomic design pattern",
+      "git": "conventional commits"
+    },
+    "tech_stack": ["React", "TypeScript", "Supabase", "MUI"],
+    "file_paths": [
+      "C:\\Users\\Juan\\OneDrive\\Desktop\\claude_desktop_projects",
+      "C:\\Users\\Juan\\OneDrive\\Desktop\\AI_Projects"
+    ],
+    "database": {
+      "primary": "Supabase PostgreSQL",
+      "cache": "SQLite for local dev",
+      "auth": "Supabase Auth with RLS"
+    }
+  }
+}

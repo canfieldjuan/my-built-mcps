@@ -1,0 +1,35 @@
+# Sandbox Execution Profiles
+# Defines how different operations are isolated
+
+profiles:
+  none:
+    # No sandboxing, but still filtered
+    type: "direct"
+    restrictions: []
+    
+  restricted:
+    # Light sandboxing with syscall filtering
+    type: "firejail"
+    firejail_args:
+      - "--noprofile"
+      - "--net=none"
+      - "--nosound"
+      - "--no3d"
+      - "--nodbus"
+      - "--private-tmp"
+      - "--read-only=/usr"
+      
+  isolated:
+    # Heavy sandboxing in container
+    type: "docker"
+    docker_config:
+      image: "secure-memory-sandbox:latest"
+      network_mode: "none"
+      read_only: true
+      security_opt:
+        - "no-new-privileges"
+        - "seccomp=unconfined"
+      cap_drop:
+        - "ALL"
+      memory: "128m"
+      cpu_shares: 512

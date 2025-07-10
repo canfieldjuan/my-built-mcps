@@ -1,0 +1,59 @@
+{
+  "mcpServers": {
+    "secure-memory": {
+      "command": "python",
+      "args": [
+        "-m",
+        "secure_memory_mcp.server"
+      ],
+      "env": {
+        "PYTHONUNBUFFERED": "1",
+        "SECURE_MEMORY_CONFIG": "/path/to/config/security_enforcer.yaml"
+      },
+      "metadata": {
+        "name": "Secure Memory MCP",
+        "version": "1.0.0",
+        "description": "Security-first memory management for AI systems"
+      }
+    }
+  },
+  
+  "comments": {
+    "security_notes": [
+      "This server implements external security controls",
+      "The AI cannot modify its own sandbox or security policies",
+      "All operations are rate-limited and logged",
+      "Sensitive content is automatically filtered"
+    ],
+    
+    "configuration": {
+      "config_location": "The SECURE_MEMORY_CONFIG env var points to the external security configuration",
+      "never_expose": "Never give the AI access to the configuration files",
+      "audit_logs": "Check ~/.secure-memory-mcp/logs/ for all activity"
+    },
+    
+    "available_tools": {
+      "memory_write": {
+        "description": "Store information in secure memory",
+        "limits": "10KB max size, 20 requests/minute",
+        "sandbox": "restricted"
+      },
+      "memory_read": {
+        "description": "Read from memory with automatic filtering",
+        "limits": "100 results max, 30-day window, 60 requests/minute",
+        "sandbox": "none (but filtered)"
+      },
+      "memory_search": {
+        "description": "Search memory contents",
+        "limits": "200 char queries, forbidden operators blocked, 30 requests/minute",
+        "sandbox": "none (but validated)"
+      }
+    },
+    
+    "monitoring": {
+      "dashboard": "Open monitoring.html in a browser for real-time monitoring",
+      "anomalies": "Check ~/.secure-memory-mcp/logs/anomalies.json",
+      "alerts": "Configure webhook in security_enforcer.yaml for alerts"
+    }
+  }
+}

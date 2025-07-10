@@ -1,0 +1,7 @@
+{
+  "init": ["load_context", "get_working_memory", "show_status"],
+  "task": ["save_task", "show_breadcrumbs"],
+  "continue": ["load_task", "show_context"],
+  "checkpoint": ["save_all", "update_breadcrumbs"],
+  "analyze": ["analyze_code", "store_analysis"]
+}

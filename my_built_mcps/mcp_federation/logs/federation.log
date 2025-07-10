@@ -1,0 +1,6 @@
+2025-07-09 19:25:33,298 - __main__ - WARNING - No .env file found. Using system environment variables.
+2025-07-09 19:25:33,299 - __main__ - WARNING - MySQL password not set - database operations may fail
+2025-07-09 19:25:33,300 - __main__ - WARNING - GitHub token not set - GitHub operations will fail
+2025-07-09 19:25:33,300 - __main__ - WARNING - Brave API key not set - web search operations will fail
+2025-07-09 19:25:33,301 - __main__ - WARNING - Sentry auth token not set - error monitoring will be limited
+2025-07-09 19:25:33,302 - __main__ - WARNING - Code intelligence path does not exist: C:\Users\Juan\OneDrive\Desktop\claude_desktop_projects\seo_auditor_production_clean

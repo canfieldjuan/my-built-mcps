@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "secure-memory-fixed": {
+      "command": "python",
+      "args": [
+        "C:\\Users\\Juan\\OneDrive\\Desktop\\claude_desktop_projects\\my_built_mcps\\secure-memory-mcp\\secure_memory\\server_hybrid_fixed.py"
+      ],
+      "env": {
+        "SECURE_MEMORY_CONFIG": "C:\\Users\\Juan\\OneDrive\\Desktop\\claude_desktop_projects\\my_built_mcps\\secure-memory-mcp\\config\\security_enforcer.json"
+      }
+    }
+  }
+}

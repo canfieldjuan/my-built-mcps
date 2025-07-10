@@ -1,0 +1,78 @@
+# Security Enforcer Configuration
+# THIS FILE IS EXTERNAL TO THE AI SYSTEM - NEVER EXPOSE
+
+version: "1.0"
+
+sandboxes:
+  memory_read:
+    level: "none"
+    filters:
+      max_results: 100
+      time_window_days: 30
+      content_filters:
+        - pattern: "password"
+          replacement: "********"
+        - pattern: "secret"
+          replacement: "******"
+        - pattern: "api_key"
+          replacement: "*******"
+        - pattern: "token"
+          replacement: "*****"
+        - pattern: "private_key"
+          replacement: "***********"
+    
+  memory_write:
+    level: "restricted"
+    validation:
+      max_size_kb: 10
+      forbidden_content:
+        - "EXECUTE"
+        - "EVAL"
+        - "SYSTEM"
+        - "sudo"
+      requires_checksum: true
+    
+  memory_search:
+    level: "none"
+    restrictions:
+      max_query_length: 200
+      forbidden_operators:
+        - "*"
+        - "DELETE"
+        - "DROP"
+        - "TRUNCATE"
+        - ".."
+        - "/"
+      max_results: 50
+
+rate_limits:
+  global:
+    read:
+      requests_per_minute: 60
+      burst_size: 10
+      penalty_seconds: 60
+    
+    write:
+      requests_per_minute: 20
+      burst_size: 5
+      penalty_seconds: 120
+    
+    search:
+      requests_per_minute: 30
+      burst_size: 5
+      penalty_seconds: 60
+  
+  per_session:
+    max_total_requests: 1000
+    reset_after_hours: 24
+
+audit:
+  log_all_requests: true
+  log_denied_requests: true
+  log_file_rotation: "daily"
+  retention_days: 90
+  
+monitoring:
+  alert_on_repeated_denials: true
+  denial_threshold: 10
+  alert_webhook: "https://your-monitoring.com/webhook"

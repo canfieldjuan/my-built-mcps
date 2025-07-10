@@ -1,0 +1,20 @@
+# Secure Memory MCP Server - Hybrid Version Requirements
+# Core MCP framework
+mcp[cli]>=1.4.0
+
+# Database
+aiosqlite>=0.19.0
+
+# Security and validation
+jsonschema>=4.17.0
+cryptography>=41.0.0
+
+# Utilities
+python-dotenv>=1.0.0
+
+# Optional: For enhanced logging
+colorlog>=6.7.0
+
+# Development and testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
