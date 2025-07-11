@@ -1,0 +1,93 @@
+{
+  "shopify": {
+    "base_url": "https://your-shop.myshopify.com/admin/api/2024-01",
+    "auth_type": "api_key",
+    "auth_config": {
+      "location": "header",
+      "key": "X-Shopify-Access-Token",
+      "value": "YOUR_SHOPIFY_TOKEN_HERE"
+    },
+    "default_headers": {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    "rate_limit": 40,
+    "timeout": 30,
+    "retry_attempts": 3,
+    "cache_ttl": 300
+  },
+  "openweather": {
+    "base_url": "https://api.openweathermap.org/data/2.5",
+    "auth_type": "api_key",
+    "auth_config": {
+      "location": "query",
+      "key": "appid",
+      "value": "YOUR_OPENWEATHER_API_KEY"
+    },
+    "default_headers": {
+      "Accept": "application/json"
+    },
+    "rate_limit": 60,
+    "timeout": 15,
+    "retry_attempts": 2,
+    "cache_ttl": 600
+  },
+  "stripe": {
+    "base_url": "https://api.stripe.com/v1",
+    "auth_type": "bearer",
+    "auth_config": {
+      "token": "sk_test_YOUR_STRIPE_SECRET_KEY"
+    },
+    "default_headers": {
+      "Content-Type": "application/x-www-form-urlencoded",
+      "Accept": "application/json"
+    },
+    "rate_limit": 100,
+    "timeout": 30,
+    "retry_attempts": 3,
+    "cache_ttl": 0
+  },
+  "github": {
+    "base_url": "https://api.github.com",
+    "auth_type": "bearer",
+    "auth_config": {
+      "token": "ghp_YOUR_GITHUB_TOKEN"
+    },
+    "default_headers": {
+      "Accept": "application/vnd.github.v3+json",
+      "User-Agent": "Universal-API-Gateway"
+    },
+    "rate_limit": 5000,
+    "timeout": 30,
+    "retry_attempts": 3,
+    "cache_ttl": 300
+  },
+  "airtable": {
+    "base_url": "https://api.airtable.com/v0",
+    "auth_type": "bearer",
+    "auth_config": {
+      "token": "patYOUR_AIRTABLE_TOKEN"
+    },
+    "default_headers": {
+      "Content-Type": "application/json"
+    },
+    "rate_limit": 5,
+    "timeout": 30,
+    "retry_attempts": 3,
+    "cache_ttl": 300
+  },
+  "slack": {
+    "base_url": "https://slack.com/api",
+    "auth_type": "bearer",
+    "auth_config": {
+      "token": "xoxb-YOUR-SLACK-BOT-TOKEN"
+    },
+    "default_headers": {
+      "Content-Type": "application/json"
+    },
+    "rate_limit": 50,
+    "timeout": 30,
+    "retry_attempts": 3,
+    "cache_ttl": 60
+  }
+}

@@ -1,0 +1,294 @@
+{
+  "shopify_get_products": {
+    "service": "shopify",
+    "path": "/products.json",
+    "method": "GET",
+    "description": "Get all products from Shopify store",
+    "parameters_schema": {
+      "type": "object",
+      "properties": {
+        "limit": {"type": "integer", "minimum": 1, "maximum": 250},
+        "page_info": {"type": "string"},
+        "status": {"type": "string", "enum": ["active", "archived", "draft"]},
+        "product_type": {"type": "string"},
+        "vendor": {"type": "string"}
+      }
+    },
+    "cache_enabled": true,
+    "requires_auth": true,
+    "tags": ["shopify", "products", "ecommerce"]
+  },
+  "shopify_get_product": {
+    "service": "shopify", 
+    "path": "/products/{product_id}.json",
+    "method": "GET",
+    "description": "Get a specific product by ID",
+    "parameters_schema": {
+      "type": "object",
+      "properties": {
+        "product_id": {"type": "string", "description": "Product ID"}
+      },
+      "required": ["product_id"]
+    },
+    "cache_enabled": true,
+    "requires_auth": true,
+    "tags": ["shopify", "products", "ecommerce"]
+  },
+  "shopify_update_product": {
+    "service": "shopify",
+    "path": "/products/{product_id}.json", 
+    "method": "PUT",
+    "description": "Update a product",
+    "parameters_schema": {
+      "type": "object",
+      "properties": {
+        "product_id": {"type": "string", "description": "Product ID"},
+        "product": {
+          "type": "object",
+          "properties": {
+            "title": {"type": "string"},
+            "body_html": {"type": "string"},
+            "vendor": {"type": "string"},
+            "product_type": {"type": "string"},
+            "status": {"type": "string", "enum": ["active", "archived", "draft"]}
+          }
+        }
+      },
+      "required": ["product_id", "product"]
+    },
+    "cache_enabled": false,
+    "requires_auth": true,
+    "tags": ["shopify", "products", "ecommerce", "write"]
+  },
+  "shopify_get_orders": {
+    "service": "shopify",
+    "path": "/orders.json",
+    "method": "GET", 
+    "description": "Get orders from Shopify store",
+    "parameters_schema": {
+      "type": "object",
+      "properties": {
+        "limit": {"type": "integer", "minimum": 1, "maximum": 250},
+        "status": {"type": "string", "enum": ["open", "closed", "cancelled", "any"]},
+        "financial_status": {"type": "string"},
+        "fulfillment_status": {"type": "string"},
+        "created_at_min": {"type": "string", "format": "date-time"},
+        "created_at_max": {"type": "string", "format": "date-time"}
+      }
+    },
+    "cache_enabled": true,
+    "requires_auth": true,
+    "tags": ["shopify", "orders", "ecommerce"]
+  },
+  "weather_current": {
+    "service": "openweather",
+    "path": "/weather",
+    "method": "GET",
+    "description": "Get current weather for a location",
+    "parameters_schema": {
+      "type": "object",
+      "properties": {
+        "q": {"type": "string", "description": "City name, state code and country code divided by comma"},
+        "lat": {"type": "number", "description": "Latitude"},
+        "lon": {"type": "number", "description": "Longitude"},
+        "units": {"type": "string", "enum": ["standard", "metric", "imperial"], "default": "metric"}
+      }
+    },
+    "cache_enabled": true,
+    "requires_auth": true,
+    "tags": ["weather", "current", "location"]
+  },
+  "weather_forecast": {
+    "service": "openweather", 
+    "path": "/forecast",
+    "method": "GET",
+    "description": "Get 5 day weather forecast",
+    "parameters_schema": {
+      "type": "object",
+      "properties": {
+        "q": {"type": "string", "description": "City name"},
+        "lat": {"type": "number"},
+        "lon": {"type": "number"},
+        "units": {"type": "string", "enum": ["standard", "metric", "imperial"], "default": "metric"},
+        "cnt": {"type": "integer", "minimum": 1, "maximum": 40, "description": "Number of timestamps"}
+      }
+    },
+    "cache_enabled": true,
+    "requires_auth": true,
+    "tags": ["weather", "forecast", "location"]
+  },
+  "stripe_list_customers": {
+    "service": "stripe",
+    "path": "/customers",
+    "method": "GET",
+    "description": "List all customers",
+    "parameters_schema": {
+      "type": "object", 
+      "properties": {
+        "limit": {"type": "integer", "minimum": 1, "maximum": 100},
+        "starting_after": {"type": "string"},
+        "ending_before": {"type": "string"},
+        "email": {"type": "string", "format": "email"}
+      }
+    },
+    "cache_enabled": true,
+    "requires_auth": true,
+    "tags": ["stripe", "customers", "payments"]
+  },
+  "stripe_create_customer": {
+    "service": "stripe",
+    "path": "/customers",
+    "method": "POST",
+    "description": "Create a new customer",
+    "parameters_schema": {
+      "type": "object",
+      "properties": {
+        "email": {"type": "string", "format": "email"},
+        "name": {"type": "string"},
+        "phone": {"type": "string"},
+        "description": {"type": "string"}
+      }
+    },
+    "cache_enabled": false,
+    "requires_auth": true,
+    "tags": ["stripe", "customers", "payments", "write"]
+  },
+  "github_get_repos": {
+    "service": "github",
+    "path": "/user/repos",
+    "method": "GET",
+    "description": "List repositories for the authenticated user",
+    "parameters_schema": {
+      "type": "object",
+      "properties": {
+        "visibility": {"type": "string", "enum": ["all", "public", "private"]},
+        "affiliation": {"type": "string"},
+        "type": {"type": "string", "enum": ["all", "owner", "public", "private", "member"]},
+        "sort": {"type": "string", "enum": ["created", "updated", "pushed", "full_name"]},
+        "direction": {"type": "string", "enum": ["asc", "desc"]},
+        "per_page": {"type": "integer", "minimum": 1, "maximum": 100},
+        "page": {"type": "integer", "minimum": 1}
+      }
+    },
+    "cache_enabled": true,
+    "requires_auth": true,
+    "tags": ["github", "repositories", "user"]
+  },
+  "github_get_repo": {
+    "service": "github",
+    "path": "/repos/{owner}/{repo}",
+    "method": "GET", 
+    "description": "Get a specific repository",
+    "parameters_schema": {
+      "type": "object",
+      "properties": {
+        "owner": {"type": "string", "description": "Repository owner"},
+        "repo": {"type": "string", "description": "Repository name"}
+      },
+      "required": ["owner", "repo"]
+    },
+    "cache_enabled": true,
+    "requires_auth": true,
+    "tags": ["github", "repositories", "specific"]
+  },
+  "github_create_issue": {
+    "service": "github",
+    "path": "/repos/{owner}/{repo}/issues",
+    "method": "POST",
+    "description": "Create an issue in a repository",
+    "parameters_schema": {
+      "type": "object",
+      "properties": {
+        "owner": {"type": "string", "description": "Repository owner"},
+        "repo": {"type": "string", "description": "Repository name"},
+        "title": {"type": "string", "description": "Issue title"},
+        "body": {"type": "string", "description": "Issue body"},
+        "assignees": {"type": "array", "items": {"type": "string"}},
+        "milestone": {"type": "integer"},
+        "labels": {"type": "array", "items": {"type": "string"}}
+      },
+      "required": ["owner", "repo", "title"]
+    },
+    "cache_enabled": false,
+    "requires_auth": true,
+    "tags": ["github", "issues", "write"]
+  },
+  "airtable_list_records": {
+    "service": "airtable",
+    "path": "/{base_id}/{table_name}",
+    "method": "GET",
+    "description": "List records in an Airtable base/table",
+    "parameters_schema": {
+      "type": "object",
+      "properties": {
+        "base_id": {"type": "string", "description": "Airtable base ID"},
+        "table_name": {"type": "string", "description": "Table name or ID"},
+        "maxRecords": {"type": "integer", "minimum": 1, "maximum": 100},
+        "pageSize": {"type": "integer", "minimum": 1, "maximum": 100},
+        "offset": {"type": "string"},
+        "view": {"type": "string"},
+        "filterByFormula": {"type": "string"},
+        "sort": {"type": "array"}
+      },
+      "required": ["base_id", "table_name"]
+    },
+    "cache_enabled": true,
+    "requires_auth": true,
+    "tags": ["airtable", "records", "database"]
+  },
+  "airtable_create_record": {
+    "service": "airtable",
+    "path": "/{base_id}/{table_name}",
+    "method": "POST",
+    "description": "Create a new record in Airtable",
+    "parameters_schema": {
+      "type": "object",
+      "properties": {
+        "base_id": {"type": "string", "description": "Airtable base ID"},
+        "table_name": {"type": "string", "description": "Table name or ID"},
+        "fields": {"type": "object", "description": "Record fields"}
+      },
+      "required": ["base_id", "table_name", "fields"]
+    },
+    "cache_enabled": false,
+    "requires_auth": true,
+    "tags": ["airtable", "records", "database", "write"]
+  },
+  "slack_post_message": {
+    "service": "slack",
+    "path": "/chat.postMessage",
+    "method": "POST",
+    "description": "Post a message to a Slack channel",
+    "parameters_schema": {
+      "type": "object",
+      "properties": {
+        "channel": {"type": "string", "description": "Channel ID or name"},
+        "text": {"type": "string", "description": "Message text"},
+        "attachments": {"type": "array"},
+        "blocks": {"type": "array"},
+        "thread_ts": {"type": "string", "description": "Timestamp of parent message for threading"}
+      },
+      "required": ["channel", "text"]
+    },
+    "cache_enabled": false,
+    "requires_auth": true,
+    "tags": ["slack", "messaging", "write"]
+  },
+  "slack_list_channels": {
+    "service": "slack",
+    "path": "/conversations.list",
+    "method": "GET",
+    "description": "List Slack channels",
+    "parameters_schema": {
+      "type": "object",
+      "properties": {
+        "exclude_archived": {"type": "boolean", "default": true},
+        "types": {"type": "string", "default": "public_channel,private_channel"},
+        "limit": {"type": "integer", "minimum": 1, "maximum": 1000}
+      }
+    },
+    "cache_enabled": true,
+    "requires_auth": true,
+    "tags": ["slack", "channels", "list"]
+  }
+}

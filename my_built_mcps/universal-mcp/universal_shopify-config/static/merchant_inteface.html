@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant - Sarah's Coffee Shop</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f9fa;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            background: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .plan-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .message {
+            display: flex;
+            gap: 12px;
+            max-width: 80%;
+        }
+        
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+        
+        .message.assistant {
+            align-self: flex-start;
+        }
+        
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        
+        .avatar.user {
+            background: #007AFF;
+            color: white;
+        }
+        
+        .avatar.assistant {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .message-content {
+            background: #f1f1f1;
+            padding: 12px 16px;
+            border-radius: 18px;
+            line-height: 1.4;
+            position: relative;
+        }
+        
+        .message.user .message-content {
+            background: #007AFF;
+            color: white;
+        }
+        
+        .message.assistant .message-content {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+        
+        .data-table {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .data-table th {
+            background: #f5f5f5;
+            padding: 8px 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .data-table td {
+            padding: 8px 12px;
+            border-top: 1px solid #f0f0f0;
+            font-size: 13px;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: 500;
+        }
+        
+        .alert {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin: 8px 0;
+            font-size: 13px;
+            color: #856404;
+        }
+        
+        .alert.success {
+            background: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        
+        .chat-input {
+            padding: 20px;
+            border-top: 1px solid #e0e0e0;
+            background: white;
+        }
+        
+        .input-container {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+        }
+        
+        .input-field {
+            flex: 1;
+            border: 2px solid #e0e0e0;
+            border-radius: 20px;
+            padding: 12px 16px;
+            font-size: 14px;
+            resize: none;
+            outline: none;
+            transition: border-color 0.2s;
+            min-height: 44px;
+            max-height: 120px;
+        }
+        
+        .input-field:focus {
+            border-color: #4CAF50;
+        }
+        
+        .send-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 18px;
+        }
+        
+        .send-button:hover {
+            background: #45a049;
+        }
+        
+        .usage-indicator {
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+            padding: 8px;
+            background: #f8f9fa;
+        }
+        
+        .quick-actions {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .quick-action {
+            background: #f0f0f0;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .quick-action:hover {
+            background: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🤖 AI Assistant - Sarah's Coffee Shop</h1>
+        <div class="plan-badge">Growth Plan</div>
+    </div>
+    
+    <div class="chat-container">
+        <div class="chat-messages" id="messages">
+            <!-- Morning greeting -->
+            <div class="message assistant">
+                <div class="avatar assistant">🤖</div>
+                <div class="message-content">
+                    <strong>Good morning, Sarah! 🌅</strong><br><br>
+                    Here's your store summary for yesterday:
+                    <div class="data-table">
+                        <table style="width: 100%;">
+                            <tr><th>Metric</th><th>Value</th></tr>
+                            <tr><td>Orders</td><td><span class="highlight">47 orders</span></td></tr>
+                            <tr><td>Revenue</td><td><span class="highlight">$1,240</span></td></tr>
+                            <tr><td>Best Seller</td><td>Ethiopian Coffee Beans (12 sold)</td></tr>
+                            <tr><td>Conversion Rate</td><td>3.2%</td></tr>
+                        </table>
+                    </div>
+                    <div class="alert">
+                        ⚠️ <strong>Low Stock Alert:</strong> French Press only has 8 units remaining
+                    </div>
+                </div>
+            </div>
+            
+            <!-- User question about inventory -->
+            <div class="message user">
+                <div class="avatar user">👩</div>
+                <div class="message-content">
+                    How's the French Press been selling lately? Should I reorder?
+                </div>
+            </div>
+            
+            <!-- AI response with analysis -->
+            <div class="message assistant">
+                <div class="avatar assistant">🤖</div>
+                <div class="message-content">
+                    <strong>French Press Sales Analysis 📊</strong><br><br>
+                    
+                    <div class="data-table">
+                        <table style="width: 100%;">
+                            <tr><th>Period</th><th>Units Sold</th><th>Trend</th></tr>
+                            <tr><td>Last 7 days</td><td>15 units</td><td>↗️ +25%</td></tr>
+                            <tr><td>Daily average</td><td>2.1 units</td><td>📈 Growing</td></tr>
+                            <tr><td>Current stock</td><td>8 units</td><td>⚠️ Low</td></tr>
+                        </table>
+                    </div>
+                    
+                    <strong>Recommendation:</strong> Yes, reorder now! At current sales rate, you'll be out of stock in <span class="highlight">4 days</span>, but your supplier needs 7 days lead time.
+                    <br><br>
+                    <strong>Suggested actions:</strong><br>
+                    • Order 50 units from Coffee Gear Co<br>
+                    • Add "limited stock" urgency to product page<br>
+                    • Consider bundling with coffee beans for upsell
+                </div>
+            </div>
+            
+            <!-- User requesting action -->
+            <div class="message user">
+                <div class="avatar user">👩</div>
+                <div class="message-content">
+                    Order 50 more and update the product description to mention limited stock
+                </div>
+            </div>
+            
+            <!-- AI confirming actions -->
+            <div class="message assistant">
+                <div class="avatar assistant">🤖</div>
+                <div class="message-content">
+                    <div class="alert success">
+                        ✅ <strong>Actions completed!</strong>
+                    </div>
+                    
+                    <strong>1. Product description updated:</strong><br>
+                    "🔥 ONLY 8 LEFT - Premium French Press Coffee Maker - Get yours before we restock! Perfect for rich, full-bodied coffee..."
+                    <br><br>
+                    <strong>2. Supplier email draft ready:</strong><br>
+                    I've prepared a reorder email for Coffee Gear Co requesting 50 French Press units. Would you like me to send it, or would you prefer to review it first?
+                    <br><br>
+                    <strong>3. Bonus suggestion:</strong><br>
+                    I noticed Ethiopian beans are your best seller. Want me to create a bundle offer: "French Press + Ethiopian Beans = Save 15%"?
+                </div>
+            </div>
+            
+            <!-- User asking about promotions -->
+            <div class="message user">
+                <div class="avatar user">👩</div>
+                <div class="message-content">
+                    Yes to the bundle! And show me what products I should put on sale this week
+                </div>
+            </div>
+            
+            <!-- AI promotion analysis -->
+            <div class="message assistant">
+                <div class="avatar assistant">🤖</div>
+                <div class="message-content">
+                    <div class="alert success">
+                        ✅ <strong>Bundle created:</strong> "Brew Master Bundle" - French Press + Ethiopian Beans, 15% off, automatically applied at checkout!
+                    </div>
+                    
+                    <strong>Products to promote this week:</strong><br><br>
+                    
+                    <strong>🎯 OVERSTOCKED (good for discounts):</strong>
+                    <div class="data-table">
+                        <table style="width: 100%;">
+                            <tr><th>Product</th><th>Stock</th><th>Sales Trend</th><th>Suggested Discount</th></tr>
+                            <tr><td>Colombian Blend</td><td>89 units</td><td>📉 Slow</td><td>20% off</td></tr>
+                            <tr><td>Coffee Filters</td><td>200 units</td><td>📉 Seasonal low</td><td>Bundle with grinders</td></tr>
+                        </table>
+                    </div>
+                    
+                    <strong>🚀 TRENDING UP (good for highlighting):</strong>
+                    • Espresso Beans (40% increase this month)<br>
+                    • Coffee Grinders (perfect for bundles)<br>
+                    • Gift sets (always popular)
+                    <br><br>
+                    
+                    <strong>🎪 Suggested promotion:</strong><br>
+                    "Colombian Clearance + Free Filters with any grinder purchase"
+                    <br><br>
+                    Want me to set this up?
+                </div>
+            </div>
+        </div>
+        
+        <div class="usage-indicator">
+            12 of 500 daily requests used • Growth Plan • <a href="#" style="color: #4CAF50;">Upgrade to Pro</a>
+        </div>
+        
+        <div class="chat-input">
+            <div class="quick-actions">
+                <button class="quick-action" onclick="sendQuickMessage('Show me today\'s orders')">📦 Today's Orders</button>
+                <button class="quick-action" onclick="sendQuickMessage('What are my top 5 products this week?')">📈 Top Products</button>
+                <button class="quick-action" onclick="sendQuickMessage('Any customer service issues?')">💬 Customer Issues</button>
+                <button class="quick-action" onclick="sendQuickMessage('Create a social media post about our new blend')">📱 Social Media</button>
+            </div>
+            
+            <div class="input-container">
+                <textarea 
+                    class="input-field" 
+                    placeholder="Ask me anything about your store..."
+                    id="messageInput"
+                    rows="1"></textarea>
+                <button class="send-button" onclick="sendMessage()">
+                    ➤
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            if (message) {
+                addMessage('user', message);
+                input.value = '';
+                
+                // Simulate AI response
+                setTimeout(() => {
+                    addMessage('assistant', 'I\'m processing your request... This is a demo interface showing what your merchants would see!');
+                }, 1000);
+            }
+        }
+        
+        function sendQuickMessage(message) {
+            addMessage('user', message);
+            setTimeout(() => {
+                addMessage('assistant', 'Processing your quick action... In the real app, this would connect to your Shopify store and provide actual data!');
+            }, 800);
+        }
+        
+        function addMessage(sender, content) {
+            const messagesContainer = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            const avatar = sender === 'user' ? '👩' : '🤖';
+            const avatarClass = sender === 'user' ? 'user' : 'assistant';
+            
+            messageDiv.innerHTML = `
+                <div class="avatar ${avatarClass}">${avatar}</div>
+                <div class="message-content">${content}</div>
+            `;
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
+        // Handle Enter key
+        document.getElementById('messageInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+        
+        // Auto-resize textarea
+        document.getElementById('messageInput').addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+        });
+    </script>
+</body>
+</html>
